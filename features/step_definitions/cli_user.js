@@ -19,8 +19,8 @@ defineSupportCode(function({Given, When/*, Then*/}) {
    *
    *  `npm install -g yo`
    */
-  Given('NPM package {string} is installed globally', function (packageName, callback) {
-    exec('npm ls --global --json --depth 1', (err, stdout) => {
+  Given('NPM package {string} is installed globally', { timeout: 10 * 1000}, function (packageName, callback) {
+    exec('npm ls --global --json --depth 1', {timeout: 10 * 1000}, (err, stdout) => {
       if (err) {
         return callback(null, err)
       }
@@ -69,10 +69,10 @@ defineSupportCode(function({Given, When/*, Then*/}) {
   When(/I start the webpack-dev-server/, function(callback) {
     this.devServer = exec('npm run start:dev', (err, stdout, stderr) => {
       if (err) {
-        return callback(err);
+        return callback(err + '\n' + stderr)
       }
-    });
+    })
 
-    callback();
-  });
+    callback()
+  })
 })

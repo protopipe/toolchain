@@ -1,6 +1,6 @@
 const {defineSupportCode} = require('cucumber')
 const fs = require('fs')
-const {exec} = require('child_process')
+//const {exec} = require('child_process')
 
 /**
  * In this file all steps are included, which are documenting the 
@@ -11,8 +11,18 @@ const {exec} = require('child_process')
  * generalize as you would do in the other files.
  */
 
-defineSupportCode(function({Given}) {
+defineSupportCode(function({Given, Then}) {
   Given(/created a file `(.*)` with content:/, function (fileName, docString, callback) {
-    fs.writeFile(fileName, docString, callback);
+    fs.writeFile(fileName, docString, callback)
+  })
+
+  Then(/there should be a "(.*)"/, function(fileName, callback) {
+    fs.exists(fileName, function(exists) {
+      if (exists) {
+        callback();
+      } else {
+        callback("File " + fileName + " does not exist");
+      }
+    });
   })
 })
